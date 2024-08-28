@@ -1,33 +1,45 @@
 const mongoose = require("mongoose");
 const validator = require("validator");
 
-const clothingItemSchema = new mongoose.Schema({
+const clothingItem = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, "The name field is required."],
+    required: true,
     minlength: 2,
     maxlength: 30,
   },
   weather: {
     type: String,
     required: true,
+    enum: {
+      values: ["hot", "warm", "cold"],
+    },
   },
-  imageURL: {
+
+  imageUrl: {
     type: String,
     required: true,
     validate: {
       validator: (v) => validator.isURL(v),
-      message: "You must enter a valid URL",
+      message: "Link is not valid",
     },
   },
+  owner: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "user",
+    required: true,
+  },
+
   likes: {
-    type: [mongoose.Schema.Types.ObjectId],
-    ref: "User",
+    type: Array,
+    required: true,
     default: [],
+  },
+
+  createdAt: {
+    type: Date,
+    default: Date.now,
   },
 });
 
-// Use "ClothingItem" as the model name and point it to the "clothingItems" collection
-module.exports =
-  mongoose.models.ClothingItem ||
-  mongoose.model("ClothingItem", clothingItemSchema, "clothingItems");
+module.exports = mongoose.model("clothingItem", clothingItem);
