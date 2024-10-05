@@ -2,7 +2,7 @@ const router = require("express").Router();
 
 const { likeItem, disLikeItem } = require("../controllers/likes");
 
-const auth = require("../middlewares/auth.js");
+const auth = require("../middlewares/auth");
 
 router.put("/:itemId/likes", auth, likeItem);
 

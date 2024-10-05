@@ -6,6 +6,26 @@ const {
   DEFAULT_ERROR_CODE,
 } = require("../utils/errors");
 
+const handleError = (err, res) => {
+  console.error(err);
+
+  if (err.name === "DocumentNotFoundError") {
+    return res
+      .status(NONEXISTENT_ERROR_CODE)
+      .send({ message: "Requested resource not found" });
+  }
+
+  if (err.name === "CastError") {
+    return res
+      .status(BAD_REQUEST_ERROR_CODE)
+      .send({ message: "Invalid data provided" });
+  }
+
+  return res
+    .status(DEFAULT_ERROR_CODE)
+    .send({ message: "An error occurred on the server" });
+};
+
 module.exports.likeItem = (req, res) => {
   clothingItem
     .findByIdAndUpdate(
@@ -40,24 +60,4 @@ module.exports.disLikeItem = (req, res) => {
     .catch((err) => {
       handleError(err, res);
     });
-};
-
-const handleError = (err, res) => {
-  console.error(err);
-
-  if (err.name === "DocumentNotFoundError") {
-    return res
-      .status(NONEXISTENT_ERROR_CODE)
-      .send({ message: "Requested resource not found" });
-  }
-
-  if (err.name === "CastError") {
-    return res
-      .status(BAD_REQUEST_ERROR_CODE)
-      .send({ message: "Invalid data provided" });
-  }
-
-  return res
-    .status(DEFAULT_ERROR_CODE)
-    .send({ message: "An error occurred on the server" });
 };

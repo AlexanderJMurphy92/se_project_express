@@ -13,11 +13,6 @@ const getAllItems = (req, res) => {
     .then((clothingItems) => res.status(201).send({ clothingItems }))
     .catch((err) => {
       console.error(err);
-      if (err.name === "ValidationError") {
-        return res
-          .status(BAD_REQUEST_ERROR_CODE)
-          .send({ message: "Invalid data" });
-      }
       return res
         .status(DEFAULT_ERROR_CODE)
         .send({ message: "An error has occurred on the server." });

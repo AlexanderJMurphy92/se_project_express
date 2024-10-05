@@ -1,7 +1,11 @@
 const jwt = require("jsonwebtoken");
+
 const bcrypt = require("bcryptjs");
+
 const User = require("../models/user");
+
 const { JWT_SECRET } = require("../utils/config");
+
 const {
   BAD_REQUEST_ERROR_CODE,
   NONEXISTENT_ERROR_CODE,
@@ -51,14 +55,14 @@ const login = async (req, res) => {
   try {
     const user = await User.findUserByCredentials(email, password);
     const token = jwt.sign({ _id: user._id }, JWT_SECRET, { expiresIn: "7d" });
-    res.send({ token });
+    return res.send({ token });
   } catch (err) {
     if (err.message === "Incorrect email or password") {
       return res
         .status(UNAUTHORIZED_ERROR_CODE)
         .send({ message: "Authorization Required" });
     }
-    handleError(err, res);
+    return handleError(err, res);
   }
 };
 

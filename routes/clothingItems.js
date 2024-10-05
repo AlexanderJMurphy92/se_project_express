@@ -8,7 +8,7 @@ const {
 
 router.get("/", getAllItems);
 
-const auth = require("../middlewares/auth.js");
+const auth = require("../middlewares/auth");
 
 router.post("/", auth, createItem);
 
